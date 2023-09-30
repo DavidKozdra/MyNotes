@@ -3,22 +3,24 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://localhost:3000;">
+
     <title>Hello World!</title>
   </head>
   <body>
+    <nav>
+      <a href="./store.html"> STORE</a>
+      
+    </nav>
     <div id="todo">
     <h1> TODO </h1>
 
     <ul class="TodoList"> 
       
     </ul>
-
-
     <div> <input type="text"> </input><button id="addButton"> ADD</button> </div>
     <script src="mainAPI.js"></script>
     <script src="render.js"></script>
     </div>
-
   </body>
 </html>

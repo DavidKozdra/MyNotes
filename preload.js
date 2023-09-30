@@ -5,6 +5,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electron', {
   // Expose specific Node.js functionality to the renderer process
   require: require,
+  readFile: require('fs').promises.readFile,
 });
 
 
@@ -18,6 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
       replaceText(`${dependency}-version`, process.versions[dependency])
     }
 
+    
   
   })
   
