@@ -54,21 +54,36 @@ window.onload = function () {
               console.error(`Failed to download: ${response.status} ${response.statusText}`);
               throw new Error('Download failed');
             }
+            console.log(response)
             return response.blob(); // Convert the response to a Blob
           })
-          .then((blob) => {
-            // Create a download link
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
 
-            a.download = `${plugin.Name}.js`;
+
+
+          .then((blob) => {
+                // Use the writeFile method to write the content to the file
+                console.log(blob)
+
+                // Create a new FileReader
+                const reader = new FileReader();
+                // Set up an event handler for when the FileReader has finished reading the Blob
+                reader.onload = function(event) {
+                    const blobText = event.target.result; // This is the text content of the Blob as a string
+                    fs.writeFile("./Plugins/"+plugin.Name+".js", blobText, (err) => {
+                        if (err) {
+                        console.error('Error writing to file:', err);
+                        return;
+                        }
+                        console.log('Data written to file successfully.');
+                    });
+                    window.alert("downloaded " + plugin.Name)
+                };
+  
+                // Read the Blob as text
+                let x = reader.readAsText(blob);
+
+                console.log(x)
         
-            // Trigger a click event on the link to initiate the download
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
           })
           .catch((error) => {
             console.error(error);

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Upload</title>
+</head>
+<body>
+    
+    <nav>
+
+        <a href="./index.html"> HOME</a>
+        <a href="./store.html">  Store</a>
+        <a href="./installedList.html"> Plugins</a>
+        
+      </nav>
+    <h1>Your Plugins</h1>
+      <div id="pluginList"> </div>
+
+    <script>
+        const fs = window.electron.require('fs');
+        const path = window.electron.require('path');
+        const __dirname = path.resolve();
+        const filePath = path.join(__dirname, 'test', 'test.txt');
+
+        const pluginFolder = './Plugins'; // Path to your plugins folder
+
+        // Read all files in the plugins folder
+        fs.readdirSync(pluginFolder).forEach((file) => {
+        const pluginFilePath = path.join(__dirname, pluginFolder, file);
+        //get the file that is exported
+        const plugin = window.electron.require(pluginFilePath);
+        // plugin is an object but its first element is the exported function
+        for (const key in plugin) {
+            //create dom object and add to the plugin list 
+
+            const pluginList = document.getElementById('pluginList');
+            const pluginContainer = document.createElement('div');
+          pluginContainer.className = 'plugin-container'; // You can define CSS for this class
+
+          // Create a div to display the plugin name
+          const pluginName = document.createElement('div');
+          pluginName.textContent = key;
+
+          // Create a delete button for each plugin
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.addEventListener('click', () => {
+            // Add code here to delete the corresponding file
+            fs.unlink(pluginFilePath, (err) => {
+              if (err) {
+                console.error('Error deleting file:', err);
+                return;
+              }
+              // Remove the plugin container from the DOM
+              pluginContainer.remove();
+            });
+          });
+
+          // Append the plugin name and delete button to the container
+          pluginContainer.appendChild(pluginName);
+          pluginContainer.appendChild(deleteButton);
+
+          // Append the container to the pluginList
+          pluginList.appendChild(pluginContainer);
+        }
+        });
+    </script>
+</body>
+</html>

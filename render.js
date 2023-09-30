@@ -23,9 +23,6 @@ fs.readdirSync(pluginFolder).forEach((file) => {
 });
 
 
-
-
-
 let TodoInstance;
 
 
@@ -55,7 +52,6 @@ let TodoInstance;
       this.eventRegistry = {};
     }
   
-
   registerEventHandler(eventName, handlerFunction) {
     if (!this.eventRegistry[eventName]) {
       this.eventRegistry[eventName] = [];

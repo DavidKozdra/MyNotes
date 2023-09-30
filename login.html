@@ -9,26 +9,18 @@
     
     <nav>
 
-        <a href="./index.html"> HOME</a>
-        <a href="./store.html"> STORE</a>
-        <a href="./installedList.html"> Plugins</a>
+        <a href="./index.html"> Back to notes </a>
         
       </nav>
-    <h1>Upload a Plugin</h1>
+    <h1>Login </h1>
     <form id="uploadForm" enctype="multipart/form-data">
-        <label for="name">Name:</label>
+        <label for="name">Username:</label>
         <input type="text" id="name" name="name" required placeholder="Plugin Name"><br><br>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required placeholder="Plugin Description"><br><br>
+        <label for="name">Password:</label>
+        <input type="password" id="password" name="password" required placeholder=""><br><br>
 
-        <label for="repoURL">Repository URL:</label>
-        <input type="url" id="repoURL" name="repoURL" required placeholder="Repository URL"><br><br>
-
-        <label for="file">File:</label>
-        <input type="file" id="file" name="file" accept=".zip,.rar,.tar,.tar.gz" required><br><br>
-
-        <input type="submit" value="Upload">
+        <input type="submit" value="Login">
     </form>
 
     <script>
@@ -36,17 +28,16 @@
             e.preventDefault();
 
             const name = sanitizeInput(document.getElementById('name').value);
-            const description = sanitizeInput(document.getElementById('description').value);
-            const repoURL = sanitizeInput(document.getElementById('repoURL').value);
+            const password = sanitizeInput(document.getElementById('password').value);
 
-            if (!name || !description || !repoURL) {
+            if (!name || !password) {
                 alert('Please fill in all required fields.');
                 return;
             }
 
             const formData = new FormData(this);
 
-            fetch('http://localhost:3000/plugins/upload', {
+            fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
                 body: formData,
             })
