@@ -50,6 +50,7 @@ let TodoInstance;
       this.getListOfNotes = this.getListOfNotes.bind(this);
       this.renderList = this.renderList.bind(this);
       this.eventRegistry = {};
+      this.ListLength =0;
     }
   
   registerEventHandler(eventName, handlerFunction) {
@@ -73,9 +74,7 @@ let TodoInstance;
     addItem(){
         
       var input = document.querySelector("input");
-      var ul = document.querySelector("ul");
-      var li = document.createElement("li");
-      li.classList.add("listItem");
+
 
       if(input.value === ""){
           alert("You must write something!");
@@ -85,8 +84,6 @@ let TodoInstance;
           alert("You must not use commas!");
           return;
       }
-      li.appendChild(document.createTextNode(input.value));
-      ul.appendChild(li);
       fs.appendFile(filePath, ", "+input.value, (err) => {
           if (err) {
             console.error('Error writing file:', err);
@@ -94,8 +91,9 @@ let TodoInstance;
           }
         });
         
+      this.ListLength +=1;
+      this.renderItem(input.value,)
       input.value = "";
-
       this.triggerEvent('add', this.addItem);
     }
 
@@ -113,7 +111,23 @@ let TodoInstance;
       
       return notes;
     } 
-    
+
+    renderItem(element,index){
+      var ul = document.querySelector("ul");
+      // create a new note
+      var li = document.createElement("li");
+      //add classes and stuff 
+      var itemcontrols = document.createElement("div");
+      const todoIcon = document.createElement('i');
+      todoIcon.textContent = '✓';
+      itemcontrols.classList.add("item-controls");
+      itemcontrols.appendChild(todoIcon)
+      li.appendChild(document.createTextNode(element));
+      li.classList.add("todoItem"); // Add a class if needed
+      li.appendChild(itemcontrols);
+      ul.appendChild(li);
+      
+    }
 
     renderList() {
       fs.readFile(filePath, 'utf8', (err, data) => {
@@ -122,15 +136,29 @@ let TodoInstance;
           return;
         }
         data = data.split(",");
+        var index =0;
         data.forEach(element => {
-        // create a new note
-        var ul = document.querySelector("ul");
-        var li = document.createElement("li");
-        li.appendChild(document.createTextNode(element));
-        ul.appendChild(li);
+          this.renderItem(element,index)
+          index++;
         });
+        this.ListLength = data.ListLength;
         input.value = "";
       });
     } 
-
+    removeItem(index) {
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+          console.error('Error reading file:', err);
+          return;
+        }
+        data = data.split(",");
+        var index =0;
+         for(let i =0; i < data.length; i++){
+          if(i == index){
+              //??
+          }
+        }  
+        input.value = "";
+      });
+    } 
   }

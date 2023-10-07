@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin Upload</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
@@ -12,7 +14,9 @@
         <a href="./index.html"> Back to notes </a>
         
       </nav>
-    <h1>Login </h1>
+
+      <div class="container">
+    <h1>Register </h1>
     <form id="uploadForm" enctype="multipart/form-data">
         
         <label for="name">Email:</label>
@@ -24,9 +28,9 @@
         <label for="name">Password:</label>
         <input type="password" id="password" name="password" required placeholder=""><br><br>
 
-        <input type="submit" value="Login">
+        <input type="submit" value="Register" class="upload-button">
     </form>
-
+</div>
     <script>
 
 function isValidEmail(email) {
@@ -42,8 +46,8 @@ function isValidEmail(email) {
 
             const name = sanitizeInput(document.getElementById('name').value);
             const password = sanitizeInput(document.getElementById('password').value);
-
             const email = sanitizeInput(document.getElementById('email').value);
+            console.log(name, password,email)
 
             if (!name || !password || !email) {
                 alert('Please fill in all required fields.');
@@ -53,11 +57,12 @@ function isValidEmail(email) {
                 alert("must be a valid email")
             }
 
-            const formData = new FormData(this);
-
             fetch('http://localhost:3000/auth/register', {
                 method: 'POST',
-                body: formData,
+                 headers: {
+                'Content-Type': 'application/json', // Set the content type to JSON
+                },
+    body: JSON.stringify({ name, password, email }),
             })
             .then(response => response.json())
             .then(data => {

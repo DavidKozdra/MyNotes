@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin Upload</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
@@ -12,6 +14,7 @@
         <a href="./index.html"> Back to notes </a>
         
       </nav>
+      <div class="container">
     <h1>Login </h1>
     <form id="uploadForm" enctype="multipart/form-data">
         <label for="name">Username:</label>
@@ -20,8 +23,9 @@
         <label for="name">Password:</label>
         <input type="password" id="password" name="password" required placeholder=""><br><br>
 
-        <input type="submit" value="Login">
+        <input type="submit" value="Login" class="upload-button">
     </form>
+    </div>
 
     <script>
         document.getElementById('uploadForm').addEventListener('submit', function (e) {
@@ -39,11 +43,16 @@
 
             fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
-                body: formData,
+                headers: {
+        'Content-Type': 'application/json', // Set the content type to JSON
+    },
+    body: JSON.stringify({ email:name, password }),
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                sessionStorage.setItem("userId", data.id)
+                sessionStorage.setItem("token", data.token)
                 alert(data.message);
             })
             .catch(error => {

@@ -4,32 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin Upload</title>
-</head>
-<body>
+    <link rel="stylesheet" href="style.css">
     
-    <nav>
+    <script src="navControl.js"></script>
+</head>
+<div>
+    
 
-        <a href="./index.html"> HOME</a>
-        <a href="./store.html"> STORE</a>
-        <a href="./installedList.html"> Plugins</a>
-        
-      </nav>
-    <h1>Upload a Plugin</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required placeholder="Plugin Name"><br><br>
+    <div class="container">
+        <h1>Upload a Plugin</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="name">Plugin Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Plugin Name"><br><br>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required placeholder="Plugin Description"><br><br>
+            <label for="repoURL">Repository URL:</label>
+            <input type="url" id="repoURL" name="repoURL" required placeholder="Repository URL"><br><br>
 
-        <label for="repoURL">Repository URL:</label>
-        <input type="url" id="repoURL" name="repoURL" required placeholder="Repository URL"><br><br>
+            <label for="description">Description:</label>
+            <textarea id="description" rows="10" cols="30">
+            
+            </textarea>
 
-        <label for="file">File:</label>
-        <input type="file" id="file" name="file" accept=".zip,.rar,.tar,.tar.gz" required><br><br>
-
-        <input type="submit" value="Upload">
-    </form>
+            <label for="file">File:</label>
+            <input type="file" id="file" name="file" accept=".zip,.rar,.tar,.tar.gz" required><br><br>
+            <input type="submit" value="Upload" class="upload-button">
+        </form>
+    </div>
+    <div class="row-container">
+            <button class="drop-menu-button" onclick="clickDropdown()">
+                +
+            </button>
+            <div class="drop-menu-container"> <a href="index.html"> <i> HOME</i> </a>| <a href="store.html"> <i> Store</i> </a> | <a href="installedList.html"> <i> Settings</i> </a></div>
+            </div>
+    </div>
 
     <script>
         document.getElementById('uploadForm').addEventListener('submit', function (e) {
@@ -45,9 +52,14 @@
             }
 
             const formData = new FormData(this);
-
+            let token = sessionStorage.getItem("token")
+            // Add the token as an Authorization header
+            const headers = {
+                    'Authorization': `${token}`, // Replace 'token' with your actual token variable
+                };
             fetch('http://localhost:3000/plugins/upload', {
                 method: 'POST',
+                headers: headers, // Include the headers in the request
                 body: formData,
             })
             .then(response => response.json())
